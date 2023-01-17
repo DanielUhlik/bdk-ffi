@@ -592,6 +592,16 @@ impl Wallet {
             .map(|u| LocalUtxo::from_utxo(u, self.network()))
             .collect())
     }
+
+    /// Return the list of spent outputs of this wallet. Note that this method only operates on the internal database,
+    /// which first needs to be Wallet.sync manually.
+    fn list_spent(&self) -> Result<Vec<LocalUtxo>, BdkError> {
+        let unspents = self.get_wallet().list_spent()?;
+        Ok(unspents
+            .iter()
+            .map(|u| LocalUtxo::from_utxo(u, self.network()))
+            .collect())
+    }
 }
 
 /// A Bitcoin address.
